@@ -1,8 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
+
 from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+from .serializers import UserSerializer, TaskSerializer
+from .models import Task
 
 
 class RegisterView(APIView):
@@ -76,3 +81,14 @@ class LoadUserView(APIView):
                 {'error': 'Something went wrong when trying to load user'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class TaskListView(APIView):
+    def get(self, request, format=None):
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(
+                {'tasks': serializer.data},
+                status=status.HTTP_200_OK
+            )
+
+        
