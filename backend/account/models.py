@@ -10,6 +10,7 @@ class Task(models.Model):
     isCompleted = models.BooleanField(default=False)
     subtasks = models.ManyToManyField("Subtask", related_name="subtasks")
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
+    column = models.ForeignKey("Column", on_delete=models.CASCADE, null=True, related_name="columns")
 
 
     def __str__(self):
@@ -23,3 +24,10 @@ class Subtask(models.Model):
     
     def __str__(self):
         return self.title
+
+class Column(models.Model):
+    name = models.CharField(max_length=200)
+    tasks = models.ForeignKey(Task, on_delete=models.CASCADE, null=True, related_name="tasks")
+
+    def __str__(self):
+        return self.name

@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer
-from .models import Task, Subtask
+from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer
+from .models import Task, Subtask, Column
 
 
 class RegisterView(APIView):
@@ -114,5 +114,17 @@ class SubtaskListView(APIView):
             {"subtasks": serializer.data},
             status=status.HTTP_200_OK
         )
+
+# <!-- Insert Subtask Detailed View -->
+
+class ColumnListView(APIView):
+    def get(self, request, format=None):
+        columns = Column.objects.all()
+        serializer = ColumnSerializer(columns, many=True)
+        return Response(
+            {"columns": serializer.data},
+            status=status.HTTP_200_OK
+        )
+
 
         
