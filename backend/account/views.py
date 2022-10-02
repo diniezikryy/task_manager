@@ -91,6 +91,21 @@ class TaskListView(APIView):
                 status=status.HTTP_200_OK
             )
 
+class TaskDetailView(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            task = Task.objects.get(pk=pk)
+            serializer = TaskSerializer(task)
+            return Response(
+                {'tasks': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load task detail'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class SubtaskListView(APIView):
     def get(self, request, format=None):
         subtasks = Subtask.objects.all()

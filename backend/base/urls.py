@@ -9,3 +9,7 @@ urlpatterns = [
     path('api/account/', include('account.urls')),
     path('admin/', admin.site.urls),
 ]
+
+urlpatterns += [
+    path('api-auth/', include('rest_framework.urls')),
+]
