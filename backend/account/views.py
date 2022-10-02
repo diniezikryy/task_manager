@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import UserSerializer, TaskSerializer
-from .models import Task
+from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer
+from .models import Task, Subtask
 
 
 class RegisterView(APIView):
@@ -90,5 +90,14 @@ class TaskListView(APIView):
                 {'tasks': serializer.data},
                 status=status.HTTP_200_OK
             )
+
+class SubtaskListView(APIView):
+    def get(self, request, format=None):
+        subtasks = Subtask.objects.all()
+        serializer = SubtaskSerializer(subtasks, many=True)
+        return Response(
+            {"subtasks": serializer.data},
+            status=status.HTTP_200_OK
+        )
 
         
