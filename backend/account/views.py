@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer
-from .models import Task, Subtask, Column
+from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer, BoardSerializer
+from .models import Task, Subtask, Column, Board
 
 
 class RegisterView(APIView):
@@ -97,7 +97,7 @@ class TaskDetailView(APIView):
             task = Task.objects.get(pk=pk)
             serializer = TaskSerializer(task)
             return Response(
-                {'tasks': serializer.data},
+                {'task': serializer.data},
                 status=status.HTTP_200_OK
             )
         except:
@@ -115,7 +115,20 @@ class SubtaskListView(APIView):
             status=status.HTTP_200_OK
         )
 
-# <!-- Insert Subtask Detailed View -->
+class SubtaskDetailView(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            subtask = Subtask.objects.get(pk=pk)
+            serializer = SubtaskSerializer(subtask)
+            return Response(
+                {'subtask': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load task detail'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class ColumnListView(APIView):
     def get(self, request, format=None):
@@ -126,5 +139,44 @@ class ColumnListView(APIView):
             status=status.HTTP_200_OK
         )
 
+class ColumnDetailView(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            column = Column.objects.get(pk=pk)
+            serializer = ColumnSerializer(column)
+            return Response(
+                {'column': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load task detail'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
-        
+class BoardListView(APIView):
+    def get(self, request, format=None):
+        boards = Board.objects.all()
+        serializer = BoardSerializer(boards, many=True)
+        return Response(
+            {"boards": serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+class BoardDetailView(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            board = Board.objects.get(pk=pk)
+            serializer = BoardSerializer(board)
+            return Response(
+                {'board': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load task detail'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+      

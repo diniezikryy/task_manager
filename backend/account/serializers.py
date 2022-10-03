@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Task, Subtask, Column
+from .models import Task, Subtask, Column, Board
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,4 +30,13 @@ class ColumnSerializer(serializers.ModelSerializer):
     class Meta:
         model = Column
         fields = '__all__'
+
+class BoardSerializer(serializers.ModelSerializer):
+    columns = ColumnSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Board
+        fields = '__all__'
+
+
 
