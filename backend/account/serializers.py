@@ -9,24 +9,25 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'username', 'id')
 
 class SubtaskSerializer(serializers.ModelSerializer):
-    userId = UserSerializer()
+    userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
 
     class Meta:
         model = Subtask
         fields = '__all__'
 
 class TaskSerializer(serializers.ModelSerializer):
-    userId = UserSerializer()
+    userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
     subtasks = SubtaskSerializer(many=True)
+    column = serializers.PrimaryKeyRelatedField(queryset=Column.objects.all(), many=False)
 
     class Meta:
         model = Task
         fields = '__all__'
 
 class ColumnSerializer(serializers.ModelSerializer):
-    tasks = TaskSerializer(many=True)
+    tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
         model = Column
-        fields = ('name', 'tasks')
+        fields = '__all__'
 
