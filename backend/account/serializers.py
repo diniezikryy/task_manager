@@ -13,7 +13,15 @@ class SubtaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subtask
-        fields = '__all__'
+        fields = (
+            'title',
+            'isCompleted',
+            'taskId',
+            'userId',
+        )
+
+    def create(self, validated_data):
+        return Subtask.objects.create(**validated_data)
 
 class TaskSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)

@@ -82,6 +82,50 @@ class LoadUserView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
+class SubtaskListView(APIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get(self, request, format=None):
+        subtasks = Subtask.objects.all()
+        serializer = SubtaskSerializer(subtasks, many=True)
+        return Response(
+            {"subtasks": serializer.data},
+            status=status.HTTP_200_OK
+        )
+
+    def post(self, request):
+        print(request.data)
+        serializer = SubtaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"success": "Successfully added new subtask!"}
+                )
+        else:
+            return Response(
+            {"error": "Something went wrong when trying to add subtask!"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+
+            
+
+class SubtaskDetailView(APIView):
+    def get(self, request, pk, format=None):
+        try:
+            subtask = Subtask.objects.get(pk=pk)
+            serializer = SubtaskSerializer(subtask)
+            return Response(
+                {'subtask': serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load task detail'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class TaskListView(APIView):
     def get(self, request, format=None):
         tasks = Task.objects.all()
@@ -98,30 +142,6 @@ class TaskDetailView(APIView):
             serializer = TaskSerializer(task)
             return Response(
                 {'task': serializer.data},
-                status=status.HTTP_200_OK
-            )
-        except:
-            return Response(
-                {'error': 'Something went wrong when trying to load task detail'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
-
-class SubtaskListView(APIView):
-    def get(self, request, format=None):
-        subtasks = Subtask.objects.all()
-        serializer = SubtaskSerializer(subtasks, many=True)
-        return Response(
-            {"subtasks": serializer.data},
-            status=status.HTTP_200_OK
-        )
-
-class SubtaskDetailView(APIView):
-    def get(self, request, pk, format=None):
-        try:
-            subtask = Subtask.objects.get(pk=pk)
-            serializer = SubtaskSerializer(subtask)
-            return Response(
-                {'subtask': serializer.data},
                 status=status.HTTP_200_OK
             )
         except:
