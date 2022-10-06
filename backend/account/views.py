@@ -108,9 +108,6 @@ class SubtaskListView(APIView):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         
-
-            
-
 class SubtaskDetailView(APIView):
     def get(self, request, pk, format=None):
         try:
@@ -125,6 +122,32 @@ class SubtaskDetailView(APIView):
                 {'error': 'Something went wrong when trying to load task detail'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+    def put(self, request, pk, *args, **kwargs):
+        try:
+            subtask_object = Subtask.objects.get(pk=pk)
+            print(subtask_object.taskId)
+
+            data = request.data
+
+            subtask_object.title = data["title"]
+            subtask_object.isCompleted = data["isCompleted"]
+
+            subtask_object.save()
+
+            serializer = SubtaskSerializer(subtask_object)
+
+            return Response(
+                {'success': 'Subtask is updated!'},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to update subtask!'},
+                status=status.HTTP_200_OK
+            )
+        
+
 
 class TaskListView(APIView):
     def get(self, request, format=None):
