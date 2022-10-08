@@ -96,7 +96,6 @@ class SubtaskListView(APIView):
         )
 
     def post(self, request):
-        print(request.data)
         serializer = SubtaskSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -175,6 +174,29 @@ class TaskListView(APIView):
         return Response(
                 {'tasks': serializer.data},
                 status=status.HTTP_200_OK
+            )
+
+    def post(self, request):
+        try:
+            data = request.data
+
+            task = Task(
+                title = data["title"],
+                description = data["description"],
+                isCompleted = data["isCompleted"],
+                userId = User.objects.get(id=data["userId"]),
+                column = Column.objects.get(id=data["column"])
+            )
+
+            task.save()
+            
+            return Response(
+                {"success": "Successfully added new task!"}
+                )
+        except:
+            return Response(
+            {"error": "Something went wrong when trying to add task!"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 class TaskDetailView(APIView):

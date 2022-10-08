@@ -28,7 +28,15 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = (
+            'id',
+            'title',
+            'description',
+            'isCompleted',
+            'userId',
+            'subtasks',
+            'column',
+        )
 
 class ColumnSerializer(serializers.ModelSerializer):
     tasks = TaskSerializer(many=True, read_only=True)
