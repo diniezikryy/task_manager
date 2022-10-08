@@ -89,6 +89,7 @@ class SubtaskListView(APIView):
     def get(self, request, format=None):
         subtasks = Subtask.objects.all()
         serializer = SubtaskSerializer(subtasks, many=True)
+
         return Response(
             {"subtasks": serializer.data},
             status=status.HTTP_200_OK
@@ -99,6 +100,7 @@ class SubtaskListView(APIView):
         serializer = SubtaskSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
             return Response(
                 {"success": "Successfully added new subtask!"}
                 )
@@ -113,6 +115,7 @@ class SubtaskDetailView(APIView):
         try:
             subtask = Subtask.objects.get(pk=pk)
             serializer = SubtaskSerializer(subtask)
+            
             return Response(
                 {'subtask': serializer.data},
                 status=status.HTTP_200_OK
@@ -123,10 +126,10 @@ class SubtaskDetailView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    
     def put(self, request, pk, *args, **kwargs):
         try:
             subtask_object = Subtask.objects.get(pk=pk)
-            print(subtask_object.taskId)
 
             data = request.data
 
@@ -144,7 +147,22 @@ class SubtaskDetailView(APIView):
         except:
             return Response(
                 {'error': 'Something went wrong when trying to update subtask!'},
-                status=status.HTTP_200_OK
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def delete(self, request, pk, format=None):
+        try:
+            subtask_object = Subtask.objects.get(pk=pk)
+            subtask_object.delete()
+
+            return Response(
+                {'success': 'Subtask is deleted'},
+                status = status.HTTP_204_NO_CONTENT
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to delete subtask!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         
 
@@ -153,6 +171,7 @@ class TaskListView(APIView):
     def get(self, request, format=None):
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True)
+
         return Response(
                 {'tasks': serializer.data},
                 status=status.HTTP_200_OK
@@ -163,6 +182,7 @@ class TaskDetailView(APIView):
         try:
             task = Task.objects.get(pk=pk)
             serializer = TaskSerializer(task)
+
             return Response(
                 {'task': serializer.data},
                 status=status.HTTP_200_OK
@@ -177,6 +197,7 @@ class ColumnListView(APIView):
     def get(self, request, format=None):
         columns = Column.objects.all()
         serializer = ColumnSerializer(columns, many=True)
+
         return Response(
             {"columns": serializer.data},
             status=status.HTTP_200_OK
@@ -187,6 +208,7 @@ class ColumnDetailView(APIView):
         try:
             column = Column.objects.get(pk=pk)
             serializer = ColumnSerializer(column)
+
             return Response(
                 {'column': serializer.data},
                 status=status.HTTP_200_OK
@@ -201,6 +223,7 @@ class BoardListView(APIView):
     def get(self, request, format=None):
         boards = Board.objects.all()
         serializer = BoardSerializer(boards, many=True)
+
         return Response(
             {"boards": serializer.data},
             status=status.HTTP_200_OK
@@ -211,6 +234,7 @@ class BoardDetailView(APIView):
         try:
             board = Board.objects.get(pk=pk)
             serializer = BoardSerializer(board)
+
             return Response(
                 {'board': serializer.data},
                 status=status.HTTP_200_OK
