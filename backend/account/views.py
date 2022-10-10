@@ -137,8 +137,6 @@ class SubtaskDetailView(APIView):
 
             subtask_object.save()
 
-            serializer = SubtaskSerializer(subtask_object)
-
             return Response(
                 {'success': 'Subtask is updated!'},
                 status=status.HTTP_200_OK
@@ -215,6 +213,44 @@ class TaskDetailView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    def put(self, request, pk, *args, **kwargs):
+        try:
+            task_object = Task.objects.get(pk=pk)
+
+            data = request.data
+
+            task_object.title = data["title"]
+            task_object.description = data["description"]
+            task_object.isCompleted = data["isCompleted"]
+            task_object.column = Column.objects.get(id=data["column"])
+
+            task_object.save()
+
+            return Response(
+                {'success': 'Task is updated!'},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to update task!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def delete(self, request, pk, format=None):
+        try:
+            task_object = Task.objects.get(pk=pk)
+            task_object.delete()
+
+            return Response(
+                {'success': 'Task is deleted'},
+                status = status.HTTP_204_NO_CONTENT
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to delete task!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class ColumnListView(APIView):
     def get(self, request, format=None):
         columns = Column.objects.all()
@@ -224,6 +260,31 @@ class ColumnListView(APIView):
             {"columns": serializer.data},
             status=status.HTTP_200_OK
         )
+
+    def post(self, request):
+        try:
+            data = request.data
+
+            # Creating new column object
+            new_column = Column(
+                name = data["name"],
+                userId = User.objects.get(id=data["userId"]),
+                board = Board.objects.get(id=data["board"])
+            )
+
+            new_column.save()
+            
+            return Response(
+                {"success": "Successfully added new column!"},
+                status=status.HTTP_201_CREATED
+                )
+        except:
+            return Response(
+            {"error": "Something went wrong when trying to add column!"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    
 
 class ColumnDetailView(APIView):
     def get(self, request, pk, format=None):
