@@ -43,7 +43,12 @@ class ColumnSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Column
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'userId',
+            'board',
+        )
 
 class BoardSerializer(serializers.ModelSerializer):
     columns = ColumnSerializer(many=True, read_only=True)

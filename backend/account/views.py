@@ -302,6 +302,42 @@ class ColumnDetailView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+    def put(self, request, pk, *args, **kwargs):
+        try:
+            column_object = Column.objects.get(pk=pk)
+
+            data = request.data
+
+            column_object.name = data["name"]
+
+            column_object.save()
+
+            return Response(
+                {'success': 'Column is updated!'},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to update column!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def delete(self, request, pk, format=None):
+        try:
+            column_object = Column.objects.get(pk=pk)
+            column_object.delete()
+
+            return Response(
+                {'success': 'Column is deleted'},
+                status = status.HTTP_204_NO_CONTENT
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to delete column!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+
 class BoardListView(APIView):
     def get(self, request, format=None):
         boards = Board.objects.all()
