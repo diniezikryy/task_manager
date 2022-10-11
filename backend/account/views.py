@@ -348,6 +348,27 @@ class BoardListView(APIView):
             status=status.HTTP_200_OK
         )
 
+    def post(self, request):
+        try:
+            data = request.data
+
+            new_board = Board(
+                name = data["name"],
+                userId = User.objects.get(id=data["userId"])
+            )
+
+            new_board.save()
+            
+            return Response(
+                {"success": "Successfully added new board!"},
+                status=status.HTTP_201_CREATED
+                )
+        except:
+            return Response(
+            {"error": "Something went wrong when trying to add board!"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
 class BoardDetailView(APIView):
     def get(self, request, pk, format=None):
         try:
@@ -362,6 +383,41 @@ class BoardDetailView(APIView):
             return Response(
                 {'error': 'Something went wrong when trying to load task detail'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def put(self, request, pk, *args, **kwargs):
+        try:
+            board_object = Board.objects.get(pk=pk)
+
+            data = request.data
+
+            board_object.name = data["name"]
+
+            board_object.save()
+
+            return Response(
+                {'success': 'Board is updated!'},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to update board!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+    def delete(self, request, pk, format=None):
+        try:
+            board_object = Board.objects.get(pk=pk)
+            board_object.delete()
+
+            return Response(
+                {'success': 'Board is deleted'},
+                status = status.HTTP_204_NO_CONTENT
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to delete board!'},
+                status = status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 

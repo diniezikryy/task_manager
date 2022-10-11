@@ -6,7 +6,12 @@ from .models import Task, Subtask, Column, Board
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'id')
+        fields = (
+            'first_name', 
+            'last_name', 
+            'username', 
+            'id',
+        )
 
 class SubtaskSerializer(serializers.ModelSerializer):
     userId = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), many=False)
@@ -47,6 +52,7 @@ class ColumnSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'userId',
+            'tasks',
             'board',
         )
 
@@ -55,7 +61,12 @@ class BoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Board
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'userId',
+            'columns',
+        )
 
 
 
