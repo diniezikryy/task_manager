@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.3",
     "cookie": "^0.4.1",
     "next": "11.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.37.0",
     "react-loader-spinner": "^4.0.0",
     "react-redux": "^7.2.4",
     "redux": "^4.1.0",
@@ -20,7 +22,10 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.12",
     "eslint": "7.31.0",
-    "eslint-config-next": "11.0.1"
+    "eslint-config-next": "11.0.1",
+    "postcss": "^8.4.17",
+    "tailwindcss": "^3.1.8"
   }
 }
