@@ -48,7 +48,7 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="w-full">
             <div className="mb-6">
               <label
-                for="success"
+                htmlFor="success"
                 className="block mb-2 text-sm font-medium text-purple-primary"
               >
                 Username
@@ -71,7 +71,7 @@ const LoginPage = () => {
 
             <div className="mb-6">
               <label
-                for="password"
+                htmlFor="password"
                 className="block mb-2 text-sm font-medium text-purple-primary"
               >
                 Password
@@ -91,7 +91,7 @@ const LoginPage = () => {
                 )}
               </p>
             </div>
-            <button class="bg-purple-primary hover:bg-purple-secondary text-white font-bold w-full py-2.5 rounded-lg">
+            <button className="bg-purple-primary hover:bg-purple-secondary text-white font-bold w-full py-2.5 rounded-lg">
               Login
             </button>
             <div className="flex justify-center mt-2 text-sm md:invisible">

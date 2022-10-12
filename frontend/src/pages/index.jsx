@@ -10,6 +10,7 @@ const homePage = () => {
 
       <div>
         <h1>Welcome to Kanban App</h1>
+        <p>Here will be a list of all your boards</p>
       </div>
     </div>
   );

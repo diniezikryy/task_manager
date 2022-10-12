@@ -1,147 +1,181 @@
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
-import { register } from '../actions/auth';
-import Layout from '../hocs/Layout';
-import Loader from 'react-loader-spinner';
-import router from 'next/router';
+import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/router";
+import { registerUser } from "../actions/auth";
+import Layout from "../hocs/Layout";
+import Loader from "react-loader-spinner";
+import router from "next/router";
+import Navbar from "../components/Navbar";
+import { useForm } from "react-hook-form";
+import Link from "next/link";
 
 const RegisterPage = () => {
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const register_success = useSelector(state => state.auth.register_success);
-    const isAuthenticated = useSelector(state => state.auth.isAuthenticated);
-    const loading = useSelector(state => state.auth.loading);
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const register_success = useSelector((state) => state.auth.register_success);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const loading = useSelector((state) => state.auth.loading);
 
-    const [formData, setFormData] = useState({
-        first_name: '',
-        last_name: '',
-        username: '',
-        password: '',
-        re_password: '',
-    });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const {
-        first_name,
-        last_name,
-        username,
-        password,
-        re_password
-    } = formData;
+  const onSubmit = (data) => {
+    console.log(data);
+    if (dispatch && dispatch !== null && dispatch !== undefined)
+      dispatch(
+        registerUser(
+          data.firstName,
+          data.lastName,
+          data.username,
+          data.password,
+          data.rePassword
+        )
+      );
+  };
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  if (typeof window !== "undefined" && isAuthenticated)
+    router.push("/dashboard");
 
-    const onSubmit = e => {
-        e.preventDefault();
+  if (register_success) router.push("/login");
 
-        if (dispatch && dispatch !== null && dispatch !== undefined)
-            dispatch(register(first_name, last_name, username, password, re_password));
-    };
+  return (
+    <Layout
+      title="Kanban App | Login"
+      content="Login page for kanban app login"
+    >
+      <Navbar />
 
-    if (typeof window !== 'undefined' && isAuthenticated)
-        router.push('/dashboard');
-    if (register_success)
-        router.push('/login');
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col w-full p-6 m-auto sm:w-1/2 md:w-1/2 lg:w-1/2 my-28">
+          <h2 className="mx-auto mb-10 text-3xl font-semibold">
+            Register for an account
+          </h2>
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+            <div className="mb-6">
+              <label
+                for="firstName"
+                className="block mb-2 text-sm font-medium text-purple-primary"
+              >
+                First Name
+              </label>
+              <input
+                type="text"
+                id="firstName"
+                className="border border-grey-dark-primary text-grey-dark-primary placeholder-grey-light-tertiary text-sm rounded-lg focus:ring-purple-primary focus:border-purple-primary block w-full p-2.5"
+                placeholder="First Name"
+                {...register("firstName", { required: true })}
+              />
+              <p className="mt-2 text-sm text-purple-primary">
+                {errors.firstName && (
+                  <span className="text-red-primary">
+                    This field is required
+                  </span>
+                )}
+              </p>
+            </div>
 
-    return (
-        <Layout
-            title='httpOnly Auth | Register'
-            content='Resiger page for this auth tutorial on httpOnly cookies'
-        >
-            <h1 className='display-4 mt-5'>Register Page</h1>
-            <form className='bg-light p-5 mt-5 mb-5' onSubmit={onSubmit}>
-                <h3>Create An Account</h3>
-                <div className='form-group'>
-                    <label className='form-label mt-5' htmlFor='first_name'>
-                        <strong>First Name*</strong>
-                    </label>
-                    <input
-                        className='form-control'
-                        type='text'
-                        name='first_name'
-                        placeholder='First Name*'
-                        onChange={onChange}
-                        value={first_name}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <label className='form-label mt-3' htmlFor='last_name'>
-                        <strong>Last Name*</strong>
-                    </label>
-                    <input
-                        className='form-control'
-                        type='text'
-                        name='last_name'
-                        placeholder='Last Name*'
-                        onChange={onChange}
-                        value={last_name}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <label className='form-label mt-3' htmlFor='username'>
-                        <strong>Username*</strong>
-                    </label>
-                    <input
-                        className='form-control'
-                        type='text'
-                        name='username'
-                        placeholder='Username*'
-                        onChange={onChange}
-                        value={username}
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <label className='form-label mt-3' htmlFor='password'>
-                        <strong>Password*</strong>
-                    </label>
-                    <input
-                        className='form-control'
-                        type='password'
-                        name='password'
-                        placeholder='Password*'
-                        onChange={onChange}
-                        value={password}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                <div className='form-group'>
-                    <label className='form-label mt-3' htmlFor='re_password'>
-                        <strong>Confirm Password*</strong>
-                    </label>
-                    <input
-                        className='form-control'
-                        type='password'
-                        name='re_password'
-                        placeholder='Confirm Password*'
-                        onChange={onChange}
-                        value={re_password}
-                        minLength='8'
-                        required
-                    />
-                </div>
-                {
-                    loading ? (
-                        <div className='d-flex justify-content-center align-items-center mt-5'>
-                            <Loader
-                                type='Oval'
-                                color='#00bfff'
-                                width={50}
-                                height={50}
-                            />
-                        </div>
-                    ) : (
-                        <button className='btn btn-primary mt-5' type='submit'>
-                            Create Account
-                        </button>
-                    )
-                }
-            </form>
-        </Layout>
-    );
+            <div className="mb-6">
+              <label
+                for="lastName"
+                className="block mb-2 text-sm font-medium text-purple-primary"
+              >
+                Last Name
+              </label>
+              <input
+                type="text"
+                id="lastName"
+                className="border border-grey-dark-primary text-grey-dark-primary placeholder-grey-light-tertiary text-sm rounded-lg focus:ring-purple-primary focus:border-purple-primary block w-full p-2.5"
+                placeholder="Last Name"
+                {...register("lastName", { required: true })}
+              />
+              <p className="mt-2 text-sm text-purple-primary">
+                {errors.lastName && (
+                  <span className="text-red-primary">
+                    This field is required
+                  </span>
+                )}
+              </p>
+            </div>
+
+            <div className="mb-6">
+              <label
+                for="username"
+                className="block mb-2 text-sm font-medium text-purple-primary"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                className="border border-grey-dark-primary text-grey-dark-primary placeholder-grey-light-tertiary text-sm rounded-lg focus:ring-purple-primary focus:border-purple-primary block w-full p-2.5"
+                placeholder="Username"
+                {...register("username", { required: true })}
+              />
+              <p className="mt-2 text-sm text-purple-primary">
+                {errors.username && (
+                  <span className="text-red-primary">
+                    This field is required
+                  </span>
+                )}
+              </p>
+            </div>
+
+            <div className="mb-6">
+              <label
+                for="password"
+                className="block mb-2 text-sm font-medium text-purple-primary"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="border border-grey-dark-primary text-grey-dark-primary placeholder-grey-light-tertiary text-sm rounded-lg focus:ring-purple-primary focus:border-purple-primary block w-full p-2.5"
+                placeholder="Password"
+                {...register("password", { required: true })}
+              />
+              <p className="mt-2 text-sm text-purple-primary">
+                {errors.password && (
+                  <span className="text-red-primary">
+                    This field is required
+                  </span>
+                )}
+              </p>
+            </div>
+
+            <div className="mb-6">
+              <label
+                for="rePassword"
+                className="block mb-2 text-sm font-medium text-purple-primary"
+              >
+                Re-enter Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="border border-grey-dark-primary text-grey-dark-primary placeholder-grey-light-tertiary text-sm rounded-lg focus:ring-purple-primary focus:border-purple-primary block w-full p-2.5"
+                placeholder="Password"
+                {...register("rePassword", { required: true })}
+              />
+              <p className="mt-2 text-sm text-purple-primary">
+                {errors.rePassword && (
+                  <span className="text-red-primary">
+                    This field is required
+                  </span>
+                )}
+              </p>
+            </div>
+            <button class="bg-purple-primary hover:bg-purple-secondary text-white font-bold w-full py-2.5 rounded-lg">
+              Register
+            </button>
+          </form>
+        </div>
+      </div>
+    </Layout>
+  );
 };
 
 export default RegisterPage;
