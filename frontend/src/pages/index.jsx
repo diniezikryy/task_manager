@@ -1,18 +1,25 @@
 import Head from "next/head";
+import Layout from "../hocs/Layout";
 
 const homePage = () => {
   return (
-    <div>
-      <Head>
-        <title>Kanban App | Home</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-      </Head>
-
+    <Layout title="Kanban App | Home" content="Home page for kanban app">
       <div>
-        <h1>Welcome to Kanban App</h1>
-        <p>Here will be a list of all your boards</p>
+        <Head>
+          <title>Kanban App | Home</title>
+          <meta
+            name="viewport"
+            content="initial-scale=1.0, width=device-width"
+          />
+        </Head>
+
+        <div>
+          <h1>Welcome to Kanban App</h1>
+          <p>Login or create an account to use this app</p>
+          <p>General description of webapp...</p>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

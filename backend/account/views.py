@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import UserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer, BoardSerializer
+from .serializers import AuthenticatedUserSerializer, PublicUserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer, BoardSerializer
 from .models import Task, Subtask, Column, Board
 
 
@@ -63,6 +63,58 @@ class RegisterView(APIView):
         except:
             return Response(
                 {'error': 'Something went wrong when trying to register account'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class LoadUsersView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, format=None):
+        isAuthenticated = request.user.is_authenticated
+        users = User.objects.all()
+
+        try:
+            if isAuthenticated:
+                serializer = AuthenticatedUserSerializer(users, many=True)
+                return Response(
+                {"users": serializer.data},
+                status=status.HTTP_200_OK
+            )
+            else:
+                serializer = PublicUserSerializer(users, many=True)
+                return Response(
+                {"users": serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load users'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class LoadUserDetailView(APIView):
+    permission_classes = (permissions.AllowAny, )
+
+    def get(self, request, pk, format=None):
+        isAuthenticated = request.user.is_authenticated
+        user = User.objects.get(pk=pk)
+
+        try:
+            if isAuthenticated:
+                serializer = AuthenticatedUserSerializer(user)
+                return Response(
+                {"user": serializer.data},
+                status=status.HTTP_200_OK
+            )
+            else:
+                serializer = PublicUserSerializer(user)
+                return Response(
+                {"user": serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {'error': 'Something went wrong when trying to load users'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

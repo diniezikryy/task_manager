@@ -3,12 +3,20 @@ from django.contrib.auth.models import User
 from .models import Task, Subtask, Column, Board
 
 
-class UserSerializer(serializers.ModelSerializer):
+class AuthenticatedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
             'first_name', 
             'last_name', 
+            'username', 
+            'id',
+        )
+
+class PublicUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
             'username', 
             'id',
         )

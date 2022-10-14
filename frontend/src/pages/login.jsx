@@ -30,8 +30,7 @@ const LoginPage = () => {
       dispatch(login(data.username, data.password));
   };
 
-  if (typeof window !== "undefined" && isAuthenticated)
-    router.push("/dashboard");
+  if (typeof window !== "undefined" && isAuthenticated) router.push("/");
 
   return (
     <Layout
