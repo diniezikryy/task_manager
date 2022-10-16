@@ -14,6 +14,7 @@ import {
   REFRESH_FAIL,
   SET_AUTH_LOADING,
   REMOVE_AUTH_LOADING,
+  SET_ACCESS_TOKEN,
 } from "./types";
 
 export const load_user = (userId) => async (dispatch) => {
@@ -31,13 +32,11 @@ export const load_user = (userId) => async (dispatch) => {
     const data = await res.json();
 
     if (res.status === 200) {
-      console.log("Success");
       dispatch({
         type: LOAD_USER_SUCCESS,
         payload: data,
       });
     } else {
-      console.log("Failed");
       dispatch({
         type: LOAD_USER_FAIL,
       });
@@ -83,6 +82,24 @@ export const request_refresh = () => async (dispatch) => {
         Accept: "application/json",
       },
     });
+
+    const storeAccessToken = async () => {
+      fetch("/api/account/refresh", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((data) =>
+          dispatch({
+            type: SET_ACCESS_TOKEN,
+            payload: data.access_token,
+          })
+        );
+    };
+
+    storeAccessToken();
 
     if (res.status === 200) {
       dispatch({
