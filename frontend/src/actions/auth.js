@@ -16,23 +16,28 @@ import {
   REMOVE_AUTH_LOADING,
 } from "./types";
 
-export const load_user = () => async (dispatch) => {
+export const load_user = (userId) => async (dispatch) => {
+  const body = JSON.stringify(userId);
+
   try {
     const res = await fetch("/api/account/user", {
       method: "GET",
       headers: {
         Accept: "application/json",
       },
+      body: body,
     });
 
     const data = await res.json();
 
     if (res.status === 200) {
+      console.log("Success");
       dispatch({
         type: LOAD_USER_SUCCESS,
         payload: data,
       });
     } else {
+      console.log("Failed");
       dispatch({
         type: LOAD_USER_FAIL,
       });
@@ -44,7 +49,7 @@ export const load_user = () => async (dispatch) => {
   }
 };
 
-export const check_auth_status = () => async (dispatch) => {
+export const check_auth_status = (user_id) => async (dispatch) => {
   try {
     const res = await fetch("/api/account/verify", {
       method: "GET",

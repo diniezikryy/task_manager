@@ -1,6 +1,9 @@
 import cookie from "cookie";
 import { API_URL } from "../../../config/index";
+
 export default async (req, res) => {
+  const { userId } = req.body;
+
   if (req.method === "GET") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
     const access = cookies.access ?? false;
@@ -20,6 +23,8 @@ export default async (req, res) => {
         },
       });
       const data = await apiRes.json();
+
+      console.log(data);
 
       if (apiRes.status === 200) {
         return res.status(200).json({

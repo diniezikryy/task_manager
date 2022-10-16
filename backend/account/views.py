@@ -121,11 +121,12 @@ class LoadUserDetailView(APIView):
 class LoadUserView(APIView):
     def get(self, request, format=None):
         try:
-            user = request.user
-            user = UserSerializer(user)
+            username = request.user
+            user = User.objects.get(username=username)
+            serializer = AuthenticatedUserSerializer(user)
 
             return Response(
-                {'user': user.data},
+                {'user': serializer.data},
                 status=status.HTTP_200_OK
             )
         except:
@@ -166,6 +167,7 @@ class SubtaskDetailView(APIView):
         try:
             subtask = Subtask.objects.get(pk=pk)
             serializer = SubtaskSerializer(subtask)
+            print(serializer.data)
             
             return Response(
                 {'subtask': serializer.data},

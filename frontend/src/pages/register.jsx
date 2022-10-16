@@ -1,20 +1,15 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { registerUser } from "../actions/auth";
 import Layout from "../hocs/Layout";
-import Loader from "react-loader-spinner";
-import router from "next/router";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
-import Link from "next/link";
 
 const RegisterPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const register_success = useSelector((state) => state.auth.register_success);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const loading = useSelector((state) => state.auth.loading);
 
   const {
     register,
@@ -23,7 +18,6 @@ const RegisterPage = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
     if (dispatch && dispatch !== null && dispatch !== undefined)
       dispatch(
         registerUser(

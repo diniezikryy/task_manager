@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { API_URL } from "../../config/index";
+import Layout from "../../hocs/Layout";
 
 export const getStaticPaths = async (req, res) => {
   const apiRes = await fetch(`${API_URL}/api/account/users`, {
@@ -38,10 +39,11 @@ export const getStaticProps = async (context) => {
 };
 
 const UserPage = ({ userData }) => {
-  console.log(userData);
   return (
     <div>
-      <p>User page of user {userData.username}</p>
+      <Layout title="Kanban App | User Page">
+        <p>User page of user {userData.username}</p>
+      </Layout>
     </div>
   );
 };
