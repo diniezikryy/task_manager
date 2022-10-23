@@ -42,36 +42,28 @@ export const getStaticProps = async (context) => {
 };
 
 const UserPage = ({ userData }) => {
-  const access_token = useSelector((state) => state.auth.access_token);
-  console.log(access_token);
-
-  /* const fetchUserData = async () => {
-    const { data } = await axios.get(
-      `${API_URL}/api/account/users/${userData.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-      }
-    );
+  async function fetchUser() {
+    const { data } = await axios.get("/api/kanbanapp/getUserData", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+      },
+    });
     return data;
-  };
+  }
 
-  const { data, error, isError, isLoading } = useQuery(
-    ["userDetails"],
-    fetchUserData
+  const { data, error, isError, isLoading } = useQuery(["user"], () =>
+    fetchUser()
   );
 
-  if (isLoading) return "Loading...";
-
-  if (isError) return <div>Error! {error.message}</div>;
-
-  console.log(data); */
+  if (isError) {
+    return <div>Error! {error.message}</div>;
+  }
 
   return (
     <div>
       <Layout title="Kanban App | User Page">
-        <p>User page of user {data.first_name}</p>
+        {isLoading ? <div>Loading...</div> : <div>{data.user.first_name}</div>}
       </Layout>
     </div>
   );

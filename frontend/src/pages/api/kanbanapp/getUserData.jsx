@@ -8,7 +8,7 @@ export default async (req, res) => {
 
     if (access === false) {
       return res.status(401).json({
-        error: "User unauthorized to make this request",
+        error: "User unauthorised to make this request",
       });
     }
 
@@ -20,6 +20,7 @@ export default async (req, res) => {
           Authorization: `Bearer ${access}`,
         },
       });
+
       const data = await apiRes.json();
 
       if (apiRes.status === 200) {
