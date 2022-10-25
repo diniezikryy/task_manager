@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { API_URL } from "../../config/index";
 import Layout from "../../hocs/Layout";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 export const getStaticPaths = async (req, res) => {
   const apiRes = await fetch(`${API_URL}/api/account/users`, {
@@ -42,7 +43,11 @@ export const getStaticProps = async (context) => {
 };
 
 const UserPage = ({ userData }) => {
-  async function fetchUser() {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const loading = useSelector((state) => state.auth.loading);
+  const router = useRouter();
+
+  async function fetchUserData() {
     const { data } = await axios.get("/api/kanbanapp/getUserData", {
       method: "GET",
       headers: {
@@ -53,12 +58,15 @@ const UserPage = ({ userData }) => {
   }
 
   const { data, error, isError, isLoading } = useQuery(["user"], () =>
-    fetchUser()
+    fetchUserData()
   );
 
   if (isError) {
     return <div>Error! {error.message}</div>;
   }
+
+  if (typeof window !== "undefined" && !loading && !isAuthenticated)
+    router.push("/login");
 
   return (
     <div>

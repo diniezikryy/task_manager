@@ -4,11 +4,7 @@ import "tailwindcss/tailwind.css";
 import Head from "next/head";
 import { Provider } from "react-redux";
 import { useStore } from "../store";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const App = ({ Component, pageProps }) => {
   const store = useStore(pageProps.initialReduxState);

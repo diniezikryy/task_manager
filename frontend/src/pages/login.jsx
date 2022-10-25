@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { login, reset_register_success } from "../actions/auth";
 import Layout from "../hocs/Layout";
-import Loader from "react-loader-spinner";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
@@ -12,7 +11,6 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const loading = useSelector((state) => state.auth.loading);
 
   const {
     register,
@@ -30,7 +28,7 @@ const LoginPage = () => {
       dispatch(login(data.username, data.password));
   };
 
-  if (typeof window !== "undefined" && isAuthenticated) router.push("/");
+  if (typeof window !== "undefined" && isAuthenticated) router.push("/app");
 
   return (
     <Layout
