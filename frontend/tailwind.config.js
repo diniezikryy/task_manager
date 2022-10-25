@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        body: ["Plus Jakarta Sans", "sans-serif"],
+      },
       colors: {
         "purple-primary": "#635FC7",
         "purple-secondary": "#A8A4FF",

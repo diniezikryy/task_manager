@@ -1,11 +1,11 @@
-import { Button, Navbar } from "flowbite-react";
-import React from "react";
+import { Button } from "flowbite-react";
+import React, { useState } from "react";
 import AppLayout from "../../hocs/AppLayout";
 
 const AppPage = () => {
   return (
-    <AppLayout>
-      <div>Hello World</div>
+    <AppLayout title="Kanban App | Dashboard">
+      <div>Content goes here...</div>
     </AppLayout>
   );
 };
