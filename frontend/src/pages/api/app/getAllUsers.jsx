@@ -13,7 +13,7 @@ export default async (req, res) => {
     }
 
     try {
-      const apiRes = await fetch(`${API_URL}/api/account/user`, {
+      const apiRes = await fetch(`${API_URL}/api/account/users`, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -25,7 +25,7 @@ export default async (req, res) => {
 
       if (apiRes.status === 200) {
         return res.status(200).json({
-          user: data.user,
+          users: data.users,
         });
       } else {
         return res.status(apiRes.status).json({
@@ -34,7 +34,7 @@ export default async (req, res) => {
       }
     } catch (err) {
       return res.status(500).json({
-        error: "Something went wrong when retrieving user",
+        error: "Something went wrong when retrieving boards",
       });
     }
   } else {

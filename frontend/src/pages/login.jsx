@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { login, reset_register_success } from "../actions/auth";
-import Layout from "../hocs/Layout";
+import Layout from "../components/hocs/Layout";
 import Navbar from "../components/Navbar";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
@@ -28,7 +28,7 @@ const LoginPage = () => {
       dispatch(login(data.username, data.password));
   };
 
-  if (typeof window !== "undefined" && isAuthenticated) router.push("/app");
+  if (typeof window !== "undefined" && isAuthenticated) router.push(`/app/`);
 
   return (
     <Layout

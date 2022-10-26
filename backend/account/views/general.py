@@ -6,8 +6,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .serializers import AuthenticatedUserSerializer, PublicUserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer, BoardSerializer
-from .models import Task, Subtask, Column, Board
+from ..serializers import AuthenticatedUserSerializer, PublicUserSerializer, TaskSerializer, SubtaskSerializer, ColumnSerializer, BoardSerializer
+from ..models import Task, Subtask, Column, Board
 
 
 class RegisterView(APIView):
@@ -95,9 +95,9 @@ class LoadUsersView(APIView):
 class LoadUserDetailView(APIView):
     permission_classes = (permissions.AllowAny, )
 
-    def get(self, request, pk, format=None):
+    def get(self, request, username, format=None):
         isAuthenticated = request.user.is_authenticated
-        user = User.objects.get(pk=pk)
+        user = User.objects.get(username=username)
 
         try:
             if isAuthenticated:
@@ -473,6 +473,7 @@ class BoardDetailView(APIView):
                 {'error': 'Something went wrong when trying to delete board!'},
                 status = status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
 
 
       

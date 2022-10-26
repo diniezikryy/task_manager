@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { request_refresh } from "../actions/auth";
+import { request_refresh } from "../../actions/auth";
 import Head from "next/head";
 
 const Layout = ({ title, content, children }) => {

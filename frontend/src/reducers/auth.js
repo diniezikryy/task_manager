@@ -16,6 +16,8 @@ import {
   REMOVE_AUTH_LOADING,
   SET_ACCESS_TOKEN,
   REMOVE_ACCESS_TOKEN,
+  SET_BOARD,
+  REMOVE_BOARD,
 } from "../actions/types";
 
 const initialState = {
@@ -24,12 +26,23 @@ const initialState = {
   loading: false,
   register_success: false,
   access_token: null,
+  board: "",
 };
 
 const authReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case SET_BOARD:
+      return {
+        ...state,
+        board: payload,
+      };
+    case REMOVE_BOARD:
+      return {
+        ...state,
+        board: "",
+      };
     case SET_ACCESS_TOKEN:
       return {
         ...state,
