@@ -3,11 +3,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import Column from "../../../components/BoardPage/Column";
 import AppLayout from "../../../components/hocs/AppLayout";
 
 const BoardPage = () => {
   const [boardData, setBoardData] = useState({});
   const [columns, setColumns] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   const router = useRouter();
   const loading = useSelector((state) => state.auth.loading);
@@ -22,15 +24,15 @@ const BoardPage = () => {
         Accept: "application/json",
       },
     });
-    return data;
+    return data.board;
   };
 
   const { data } = useQuery(["boardData"], () => fetchBoardData());
 
   useEffect(() => {
     if (data) {
-      setBoardData(data.board[0]);
-      setColumns(data.board[0].columns);
+      setBoardData(data);
+      setColumns(data.columns);
     }
   }, [data]);
 
@@ -42,9 +44,9 @@ const BoardPage = () => {
 
   return (
     <AppLayout>
-      <div className="flex p-6">
+      <div className="flex py-6 pl-6">
         {columns.map((column) => (
-          <div className="w-1/3">{column.name}</div>
+          <Column column={column} key={column.id} />
         ))}
       </div>
     </AppLayout>

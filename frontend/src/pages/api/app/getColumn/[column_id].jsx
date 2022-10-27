@@ -2,7 +2,7 @@ import cookie from "cookie";
 import { API_URL } from "../../../../config/index";
 
 export default async (req, res) => {
-  const { board_id } = req.query;
+  const { column_id } = req.query;
 
   if (req.method === "GET") {
     const cookies = cookie.parse(req.headers.cookie ?? "");
@@ -15,19 +15,22 @@ export default async (req, res) => {
     }
 
     try {
-      const apiRes = await fetch(`${API_URL}/api/account/boards/${board_id}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${access}`,
-        },
-      });
+      const apiRes = await fetch(
+        `${API_URL}/api/account/columns/${column_id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
 
       const data = await apiRes.json();
 
       if (apiRes.status === 200) {
         return res.status(200).json({
-          board: data.board,
+          column: data.column,
         });
       } else {
         return res.status(apiRes.status).json({
