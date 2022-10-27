@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import RegisterView, LoadUserView, LoadUsersView, LoadUserDetailView, TaskListView, SubtaskListView,TaskDetailView, ColumnListView, SubtaskDetailView, ColumnDetailView, BoardListView, BoardDetailView, UserBoards
+from .views import RegisterView, LoadUserView, LoadUsersView, LoadUserDetailView, TaskListView, SubtaskListView,TaskDetailView, ColumnListView, SubtaskDetailView, ColumnDetailView, BoardListView, BoardDetailView, UserBoards, SelectedUserBoard
 
 
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     path('boards/<int:pk>', BoardDetailView.as_view()),
     path('boards/<int:pk>', BoardDetailView.as_view()),
     path('user/boards', UserBoards.as_view()),
+    path('user/boards/<int:pk>', SelectedUserBoard.as_view()),
 ]
 
 

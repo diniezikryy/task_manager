@@ -52,7 +52,7 @@ class TaskSerializer(serializers.ModelSerializer):
         )
 
 class ColumnSerializer(serializers.ModelSerializer):
-    tasks = TaskSerializer(many=True, read_only=True)
+    tasks = TaskSerializer(many=True)
 
     class Meta:
         model = Column

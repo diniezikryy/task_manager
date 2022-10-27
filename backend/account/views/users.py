@@ -16,3 +16,12 @@ class UserBoards(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return Board.objects.filter(userId=user)
+
+class SelectedUserBoard(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = BoardSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        board = Board.objects.filter(id=self.kwargs['pk'])
+        return board

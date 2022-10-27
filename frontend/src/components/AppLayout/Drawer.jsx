@@ -1,13 +1,7 @@
 import React from "react";
 import DrawerBoard from "./DrawerBoard";
 
-const Drawer = ({
-  userBoards,
-  showSidebar,
-  setShowSidebar,
-  selectedBoard,
-  setSelectedBoard,
-}) => {
+const Drawer = ({ userBoards, showSidebar, setShowSidebar }) => {
   const sidebarToggle = () => {
     setShowSidebar(!showSidebar);
   };
@@ -41,7 +35,7 @@ const Drawer = ({
 
       <div className="mt-4">
         {userBoards.map((board) => (
-          <DrawerBoard name={board.name} key={board.id} />
+          <DrawerBoard board={board} key={board.id} />
         ))}
       </div>
 

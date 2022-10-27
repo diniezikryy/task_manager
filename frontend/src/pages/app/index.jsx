@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import AppLayout from "../../components/hocs/AppLayout";
+import SelectBoard from "../../components/BoardPage/SelectBoard";
 
 const AppPage = () => {
   const loading = useSelector((state) => state.auth.loading);
@@ -17,7 +18,7 @@ const AppPage = () => {
 
   return (
     <AppLayout title="Kanban App | Dashboard">
-      <div>Select a board to get started!</div>
+      <SelectBoard />
     </AppLayout>
   );
 };

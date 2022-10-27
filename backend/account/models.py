@@ -8,7 +8,7 @@ class Task(models.Model):
     description = models.CharField(max_length=200)
     isCompleted = models.BooleanField(default=False)
     userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    column = models.ForeignKey("Column", on_delete=models.CASCADE, null=True, related_name="+")
+    column = models.ForeignKey("Column", on_delete=models.CASCADE, null=True, related_name="tasks")
 
     def __str__(self):
         return self.title
